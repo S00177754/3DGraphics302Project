@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/ronan/Documents/GitHub/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Models/CollectorModel.fbx</SourceFile>
-  <SourceTime>2020-02-18T13:28:40.8024523+00:00</SourceTime>
+  <SourceTime>2020-03-02T15:29:55.7536266+00:00</SourceTime>
   <DestFile>C:/Users/ronan/Documents/GitHub/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/bin/Windows/Models/CollectorModel.xnb</DestFile>
-  <DestTime>2020-03-02T14:59:00.7238199+00:00</DestTime>
+  <DestTime>2020-03-02T15:36:48.5570719+00:00</DestTime>
   <Importer>FbxImporter</Importer>
   <ImporterTime>2018-12-08T16:35:54+00:00</ImporterTime>
   <Processor>ModelProcessor</Processor>

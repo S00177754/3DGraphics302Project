@@ -11,8 +11,6 @@ matrix World;
 matrix View;
 matrix Projection;
 
-
-
 //Point Light
 float3 PointLightPositions[2];
 float3 PointLightAttenuations[2];
@@ -26,21 +24,41 @@ float3 DirectionalLightDirection = float3(0, 1, 0);
 //Common
 float3 AmbientColor = float3(.15, .15, .15);
 float3 DiffuseColor = float3(1, 1, 1);
-texture DiffuseTextures[2];
-texture NormalTexture;
+Texture2D DiffuseTextures[2];
+Texture2D NormalTexture;
+SamplerState TextureSamples[3];
 
+//Samplers - Need to find a way to make into array
+//sampler DiffuseTextureSamplerOne = sampler_state
+//{
+//    texture = <DiffuseTextures[0]>;
+//};
+
+//sampler DiffuseTextureSamplerTwo = sampler_state
+//{
+//    texture = <DiffuseTextures[1]>;
+//};
+
+//sampler NormalTextureSampler = sampler_state
+//{
+//    texture = <NormalTexture>;
+//};
 
 //Vertex Shader
 struct VertexShaderInput
 {
 	float4 Position : POSITION0;
-	float4 Color : COLOR0;
+    float2 UV : TEXCOORD0;
+    float3 Normal : NORMAL0;
 };
 
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
-	float4 Color : COLOR0;
+    float2 UV : TEXCOORD0;
+    float3 Normal : TEXCOORD1;
+    float3 WorldPositionPL[2] : TEXCOORD2;
+    float2 ViewDirection : TEXCOORD3;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
@@ -48,15 +66,45 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	VertexShaderOutput output = (VertexShaderOutput)0;
 
 	//output.Position = mul(input.Position, WorldViewProjection);
-	output.Color = input.Color;
+	//output.Color = input.Color;
 
 	return output;
+}
+
+float4 CreatePointLight(VertexShaderOutput input, int arrayIndex):COLOR
+{
+    float3 color = DiffuseColor; //Color of the object
+    float3 lightingColor = AmbientColor; //Color when no light
+    float3 lightDirection = normalize(PointLightPositions[arrayIndex] - input.WorldPositionPL[arrayIndex]);
+    
+    float3 angle = saturate(dot(input.Normal, lightDirection)); //No need for sampling normal?
+    float distance = distance(PointLightPositions[arrayIndex], input.WorldPositionPL[arrayIndex]);
+    float attenuation = 1 - pow(clamp(distance / PointLightAttenuations[arrayIndex], 0, 1), PointLightFallOff);
+    
+    lightingColor += angle * attenuation * PointLightColors[arrayIndex];
+    
+    return float4(color * lightingColor, 1);
+}
+
+float4 CreateDirectionalLight(VertexShaderOutput input):COLOR
+{
+    float3 color = DiffuseColor;
+    color *= DiffuseTextures[0].Sample(TextureSamples[0], input.UV);
+    
+    float3 lightingColor = AmbientColor;
+    float3 lightDirection = normalize(DirectionalLightDirection);
+    
+    float3 angle = saturate(dot(input.Normal, lightDirection));
+    lightingColor += saturate(angle * color * DirectionalLightColor);
+    
+    return float4(lightingColor, 1);
+   
 }
 
 //PixelShader
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-	return input.Color;
+	return 0;
 }
 
 

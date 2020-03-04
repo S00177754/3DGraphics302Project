@@ -57,28 +57,34 @@ struct VertexShaderOutput
 	float4 Position : SV_POSITION;
     float2 UV : TEXCOORD0;
     float3 Normal : TEXCOORD1;
-    float3 WorldPositionPL[2] : TEXCOORD2;
-    float2 ViewDirection : TEXCOORD3;
+    float3 WorldPosition : TEXCOORD2;
+    //float2 ViewDirection : TEXCOORD3;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
-	VertexShaderOutput output = (VertexShaderOutput)0;
+	VertexShaderOutput output;
 
-	//output.Position = mul(input.Position, WorldViewProjection);
-	//output.Color = input.Color;
+    float4 worldPos = mul(input.Position, World);
+    float4 viewPos = mul(worldPos, View);
 
+    output.Position = mul(viewPos, Projection);
+    output.WorldPosition = worldPos;
+    output.Normal = normalize(mul(input.Normal, World));
+    output.UV = input.UV;
+   
 	return output;
 }
 
+//Light Creation Methods
 float4 CreatePointLight(VertexShaderOutput input, int arrayIndex):COLOR
 {
     float3 color = DiffuseColor; //Color of the object
     float3 lightingColor = AmbientColor; //Color when no light
-    float3 lightDirection = normalize(PointLightPositions[arrayIndex] - input.WorldPositionPL[arrayIndex]);
+    float3 lightDirection = normalize(PointLightPositions[arrayIndex] - input.WorldPosition);
     
     float3 angle = saturate(dot(input.Normal, lightDirection)); //No need for sampling normal?
-    float distance = distance(PointLightPositions[arrayIndex], input.WorldPositionPL[arrayIndex]);
+    float distance = distance(PointLightPositions[arrayIndex], input.WorldPosition);
     float attenuation = 1 - pow(clamp(distance / PointLightAttenuations[arrayIndex], 0, 1), PointLightFallOff);
     
     lightingColor += angle * attenuation * PointLightColors[arrayIndex];

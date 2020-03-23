@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Profile>Reach</Profile>
+  <Profile>HiDef</Profile>
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/ronan/Documents/GitHub/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Effects/MixedLightEffect.fx</File>
-    <File>C:/Users/ronan/Documents/GitHub/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Models/CollectorModel.fbx</File>
+    <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Effects/MixedLightEffect.fx</File>
+    <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Models/CollectorModel.fbx</File>
+    <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Textures/wood4.png</File>
+    <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Textures/WoodNormal.bmp</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>

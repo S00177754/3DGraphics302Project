@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EOMProject_3DGraphics302.Classes.Custom.Models;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Sample;
+using System.Collections.Generic;
 
 namespace EOMProject_3DGraphics302
 {
@@ -12,10 +15,36 @@ namespace EOMProject_3DGraphics302
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        InputEngine input;
+        DebugEngine debug;
+        ImmediateShapeDrawer shapeDrawer;
+
+        List<MixedLightModel> gameObjects = new List<MixedLightModel>();
+        Camera mainCamera;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            graphics.ApplyChanges();
+
+            input = new InputEngine(this);
+            debug = new DebugEngine();
+            shapeDrawer = new ImmediateShapeDrawer();
+
+            Window.AllowUserResizing = true;
+            IsMouseVisible = true;
+
             Content.RootDirectory = "Content";
+        }
+
+        void AddModel(MixedLightModel model)
+        {
+            model.Initialize();
+            model.LoadContent();
+            gameObjects.Add(model);
         }
 
         /// <summary>
@@ -27,7 +56,16 @@ namespace EOMProject_3DGraphics302
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            GameUtilities.Content = Content;
+            GameUtilities.GraphicsDevice = GraphicsDevice;
 
+            debug.Initialize();
+            shapeDrawer.Initialize();
+
+            mainCamera = new Camera("cam", new Vector3(0, 100, 400), new Vector3(0, 0, -1));
+            mainCamera.Initialize();
+
+            
             base.Initialize();
         }
 
@@ -40,6 +78,7 @@ namespace EOMProject_3DGraphics302
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            AddModel(new MixedLightModel("CollectorModel", Vector3.Zero));
             // TODO: use this.Content to load your game content here
         }
 
@@ -59,8 +98,15 @@ namespace EOMProject_3DGraphics302
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            GameUtilities.Time = gameTime;
+
+            if (InputEngine.IsKeyHeld(Keys.Escape))
                 Exit();
+
+            mainCamera.Update();
+
+
+            gameObjects.ForEach(go => go.Update());
 
             // TODO: Add your update logic here
 
@@ -74,6 +120,17 @@ namespace EOMProject_3DGraphics302
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            foreach (CustomEffectModel model in gameObjects)
+            {
+                if (mainCamera.Frustum.Contains(model.AABB) != ContainmentType.Disjoint)
+                {
+                    model.Draw(mainCamera);
+                }
+
+            }
+
+            debug.Draw(mainCamera);
 
             // TODO: Add your drawing code here
 

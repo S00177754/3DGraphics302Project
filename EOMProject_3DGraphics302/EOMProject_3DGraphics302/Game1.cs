@@ -19,7 +19,7 @@ namespace EOMProject_3DGraphics302
         DebugEngine debug;
         ImmediateShapeDrawer shapeDrawer;
 
-        List<MixedLightModel> gameObjects = new List<MixedLightModel>();
+        List<GameObject3D> gameObjects = new List<GameObject3D>();
         Camera mainCamera;
 
         public Game1()
@@ -40,7 +40,7 @@ namespace EOMProject_3DGraphics302
             Content.RootDirectory = "Content";
         }
 
-        void AddModel(MixedLightModel model)
+        void AddModel(SimpleModel model)
         {
             model.Initialize();
             model.LoadContent();
@@ -78,7 +78,7 @@ namespace EOMProject_3DGraphics302
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            AddModel(new MixedLightModel("CollectorModel", Vector3.Zero));
+            AddModel(new PointLightModel("CollectorModel", Vector3.Zero));
             // TODO: use this.Content to load your game content here
         }
 

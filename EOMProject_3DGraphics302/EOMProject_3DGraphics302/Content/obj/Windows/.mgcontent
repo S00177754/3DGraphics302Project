@@ -4,12 +4,18 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Effects/MixedLight.fx</File>
     <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Effects/MixedLightEffect.fx</File>
     <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Models/CollectorModel.fbx</File>
+    <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Models/house.fbx</File>
+    <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Textures/white.png</File>
     <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Textures/wood4.png</File>
-    <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Textures/WoodNormal.bmp</File>
+    <File>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Textures/WoodNormal.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

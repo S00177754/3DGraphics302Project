@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Sample;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +78,11 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
 
         public override void Update()
         {
+            for (int i = 0; i < PointLightPositions.Length; i++)
+            {
+                DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], PointLightAttenuations[i]), PointLightColors[i]);
+            }
+
             base.Update();
         }
 

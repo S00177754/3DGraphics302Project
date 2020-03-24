@@ -43,9 +43,11 @@
   <ItemGroup>
     <Compile Include="Classes\Custom\Materials\Material.cs" />
     <Compile Include="Classes\Custom\Materials\MixedLightMaterial.cs" />
+    <Compile Include="Classes\Custom\Materials\PointLightMaterial.cs" />
     <Compile Include="Classes\Custom\Models\CustomEffectModel.cs" />
     <Compile Include="Classes\Custom\Models\MeshTag.cs" />
     <Compile Include="Classes\Custom\Models\MixedLightModel.cs" />
+    <Compile Include="Classes\Custom\Models\PointLightModel.cs" />
     <Compile Include="Classes\Engine\Camera.cs" />
     <Compile Include="Classes\Engine\DebugEngine.cs" />
     <Compile Include="Classes\Engine\GameObject3D.cs" />
@@ -66,15 +68,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Effects\MixedLight.fx" />
     <Content Include="Content\Effects\MixedLightEffect.fx" />
     <Content Include="Content\Textures\wood4.png" />
-    <Content Include="Content\Textures\WoodNormal.bmp" />
+    <Content Include="Content\Textures\WoodNormal.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
     <None Include="Content\Models\CollectorModel.fbx" />
+    <None Include="Content\Models\house.fbx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

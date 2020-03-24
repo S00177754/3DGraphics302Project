@@ -16,21 +16,12 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Models
         {
             Material = new MixedLightMaterial()
             {
-                PointLightPositions = new Vector3[] { new Vector3(1, 1, 1), new Vector3(-1, 1, -1) },
+                PointLightPositions = new Vector3[] { new Vector3(0, 10, 10), new Vector3(100, 100, 100) },
                 PointLightAttenuations = new float[] { 100, 100 },
-                PointLightColors = new Color[] { Color.Red, Color.Blue },
-                PointLightFallOff = 2,
-
-                DirectionalLightColor = Color.White,
-                DirectionalLightDirection = new Vector3(0, 1, 0),
-
-                AmbientColor = Color.White,
-                DiffuseColor = Color.White,
-
+                PointLightColors = new Color[] { Color.White, Color.White },
                 DiffuseTextureOne = GameUtilities.Content.Load<Texture2D>("Textures/wood4"),
-                ////NormalTexture = GameUtilities.Content.Load<Texture2D>(@"Textures/WoodNormal"),
-                SpecularColor = Color.White,
-                SpecularPower = 0.3f,
+                NormalTexture = GameUtilities.Content.Load<Texture2D>(@"Textures/WoodNormal"),
+
 
             };
 

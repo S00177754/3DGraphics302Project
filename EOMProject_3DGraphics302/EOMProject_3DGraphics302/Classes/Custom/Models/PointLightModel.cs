@@ -17,10 +17,13 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Models
             Material = new PointLightMaterial()
             {
                 LightColor = Color.White,
+                LightColorTwo = Color.Blue,
                 Texture = GameUtilities.Content.Load<Texture2D>("Textures/wood4"),
                 NormalTexture = GameUtilities.Content.Load<Texture2D>("Textures/WoodNormal"),
                 Attenuation = 100,
-                Position = new Vector3(0, 10, 10)
+                AttenuationTwo = 100,
+                Position = new Vector3(0, 0, 0),
+                PositionTwo = new Vector3(0,5,0)
             };
 
             CustomEffect = GameUtilities.Content.Load<Effect>("Effects/MixedLight");

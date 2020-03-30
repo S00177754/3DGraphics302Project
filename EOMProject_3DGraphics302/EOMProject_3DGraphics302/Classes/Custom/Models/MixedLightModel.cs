@@ -16,21 +16,28 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Models
         {
             Material = new MixedLightMaterial()
             {
-                PointLightPositions = new Vector3[] { new Vector3(0, 10, 10), new Vector3(100, 100, 100) },
-                PointLightAttenuations = new float[] { 100, 100 },
-                PointLightColors = new Color[] { Color.White, Color.White },
-                DiffuseTextureOne = GameUtilities.Content.Load<Texture2D>("Textures/wood4"),
-                NormalTexture = GameUtilities.Content.Load<Texture2D>(@"Textures/WoodNormal"),
-
-
+                DirectionalLightColor = Color.White,
+                DirectionalLightDirection = new Vector3(0,0,1),
+                DiffuseTextureOne = GameUtilities.Content.Load<Texture2D>(@"Textures/wood4"),
+                NormalTexture = GameUtilities.Content.Load<Texture2D>(@"Textures/WoodNormal")
             };
 
             CustomEffect = GameUtilities.Content.Load<Effect>("Effects/MixedLightEffect");
         }
 
+        public override void Update()
+        {
+            base.Update();
+        }
+
         public override void LoadContent()
         {
             base.LoadContent();
+        }
+
+        public void UpdateCamera(Vector3 camPos)
+        {
+            (Material as MixedLightMaterial).UpdateCamera(camPos);
         }
 
     }

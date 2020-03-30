@@ -13,80 +13,88 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
     {
         #region Properties
 
-        public Vector3[] PointLightPositions { get; set; } = new Vector3[2];
-        public float[] PointLightAttenuations { get; set; } = new float[2];
-        public Color[] PointLightColors { get; set; } = new Color[2];
-        public float PointLightFallOff { get; set; }
-
         public Color DirectionalLightColor { get; set; }
         public Vector3 DirectionalLightDirection { get; set; }
-
-        public Color AmbientColor { get; set; }
-        public Color DiffuseColor { get; set; }
-
         public Texture DiffuseTextureOne { get; set; }
-        public Texture DiffuseTextureTwo { get; set; }
         public Texture NormalTexture { get; set; }
 
-        public Color SpecularColor { get; set; }
-        public float SpecularPower { get; set; }
+        public Vector3 CameraPosition { get; set; }
+
         #endregion
 
         public override void SetEffectParameters(Effect effect)
         {
-            if (effect.Parameters["PointLightPositions"] != null)
-                effect.Parameters["PointLightPositions"].SetValue(PointLightPositions);
-
-            if (effect.Parameters["PointLightAttenuations"] != null)
-                effect.Parameters["PointLightAttenuations"].SetValue(PointLightAttenuations);
-
-            if (effect.Parameters["PointLightColors"] != null)
-                effect.Parameters["PointLightColors"].SetValue(PointLightColors.ToVector3());
-
-            if (effect.Parameters["PointLightFallOff"] != null)
-                effect.Parameters["PointLightFallOff"].SetValue(PointLightFallOff);
-
             if (effect.Parameters["DirectionalLightColor"] != null)
                 effect.Parameters["DirectionalLightColor"].SetValue(DirectionalLightColor.ToVector3());
 
             if (effect.Parameters["DirectionalLightDirection"] != null)
                 effect.Parameters["DirectionalLightDirection"].SetValue(DirectionalLightDirection);
 
-            if (effect.Parameters["AmbientColor"] != null)
-                effect.Parameters["AmbientColor"].SetValue(AmbientColor.ToVector3());
-
-            if (effect.Parameters["DiffuseColor"] != null)
-                effect.Parameters["DiffuseColor"].SetValue(DiffuseColor.ToVector3());
-
             if (effect.Parameters["DiffuseTextureOne"] != null)
                 effect.Parameters["DiffuseTextureOne"].SetValue(DiffuseTextureOne);
-
-            if (effect.Parameters["DiffuseTextureTwo"] != null)
-                effect.Parameters["DiffuseTextureTwo"].SetValue(DiffuseTextureTwo);
 
             if (effect.Parameters["NormalTexture"] != null)
                 effect.Parameters["NormalTexture"].SetValue(NormalTexture);
 
-            if (effect.Parameters["SpecularColor"] != null)
-                effect.Parameters["SpecularColor"].SetValue(SpecularColor.ToVector3());
-
-            if (effect.Parameters["SpecularPower"] != null)
-                effect.Parameters["SpecularPower"].SetValue(SpecularPower);
+            if (effect.Parameters["CameraPosition"] != null)
+                effect.Parameters["CameraPosition"].SetValue(CameraPosition);
 
             base.SetEffectParameters(effect);
         }
 
         public override void Update()
         {
-            for (int i = 0; i < PointLightPositions.Length; i++)
-            {
-                DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], PointLightAttenuations[i]), PointLightColors[i]);
-            }
+            //for (int i = 0; i < PointLightPositions.Length; i++)
+            //{
+            //    DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], PointLightAttenuations[i]), PointLightColors[i]);
+            //    DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], 1f), Color.DarkMagenta);
+            //}
 
             base.Update();
         }
 
+        public void UpdateCamera(Vector3 cameraPosition)
+        {
+            CameraPosition = cameraPosition;
+        }
+
     }
+
+    public class ColorMaterial : Material
+    {
+        public Color Color { get; set; }
+        public Texture2D Texture { get; set; }
+        public Texture2D Texture2 { get; set; }
+        public Vector2 UVOffset { get; set; }
+
+        public override void SetEffectParameters(Effect effect)
+        {
+            //color 0 - 255
+            //gpu 0 - 1
+
+            if (effect.Parameters["Color"] != null)
+                effect.Parameters["Color"].SetValue(Color.ToVector3());
+
+            if (effect.Parameters["Texture"] != null)
+                effect.Parameters["Texture"].SetValue(Texture);
+
+            if (effect.Parameters["Texture2"] != null)
+                effect.Parameters["Texture2"].SetValue(Texture2);
+
+            if (effect.Parameters["UVOffset"] != null)
+                effect.Parameters["UVOffset"].SetValue(UVOffset);
+
+            base.SetEffectParameters(effect);
+        }
+
+        public override void Update()
+        {
+            //Set scroll here
+            UVOffset += new Vector2(0.0001f, 0.0001f);
+            base.Update();
+        }
+    }
+
 
     public static class Extensions 
     {

@@ -35,7 +35,7 @@ Texture2D NormalTexture;
 
 float3 CameraPosition;
 float3 SpecularColor = float3(0, 0, 0);
-float SpecularPower = 64;
+float SpecularPower = 4;
 
 sampler DiffuseTextureSamplerOne = sampler_state
 {
@@ -104,7 +104,26 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 //}
 
 
-float3 DirectionalLightCalculate(VertexShaderOutput input, float3 normalData) : COLOR
+float3 DirectionalLightWithSpecular(VertexShaderOutput input, float3 normalData) : COLOR
+{
+    float3 ObjectColor = DiffuseColor; //white issue
+    ObjectColor *= DiffuseTextureOne.Sample(DiffuseTextureSamplerOne, input.UV);
+    //ObjectColor += AmbientColor; //Color when there isn't any light.
+    
+    float3 LightDirection = normalize(DirectionalLightDirection);
+    float3 FinalColor = DirectionalLightColor * saturate(dot(LightDirection, normalData));
+    float toEye = normalize(input.ViewDirection - input.WorldPosition);
+    float NH = saturate(dot(normalize(toEye + LightDirection), normalData));
+    
+    //FinalColor +=  DirectionalLightColor.rgb * pow(NH, SpecularPower);
+    
+    FinalColor += ObjectColor;
+    
+    return FinalColor;
+   
+}
+
+float3 DirectionalLight(VertexShaderOutput input, float3 normalData) : COLOR
 {
     float3 ObjectColor = DiffuseColor;
     ObjectColor *= DiffuseTextureOne.Sample(DiffuseTextureSamplerOne, input.UV);
@@ -116,6 +135,7 @@ float3 DirectionalLightCalculate(VertexShaderOutput input, float3 normalData) : 
     //float3 SpecularLight = pow(saturate(dot(ReflectionAngle, input.ViewDirection)), SpecularPower) * SpecularColor;
     
     //float3 FinalColor = LightingColor + saturate(SpecularColor * LightingColor * ObjectColor);
+    
     float3 normal = normalize(input.Normal);
     float3 intensity = saturate(dot(normal, LightDirection)) * DirectionalLightColor;
     float3 FinalColor = saturate((LightingColor + intensity) * ObjectColor);
@@ -132,7 +152,7 @@ float4 MainPS(VertexShaderOutput input):COLOR
     Normal = Normal * 2 - 1;
     //Normal = float3(0, 0, 0);
     
-    float3 FinalColor = DirectionalLightCalculate(input, Normal);
+    float3 FinalColor = DirectionalLight(input, Normal);
     //FinalColor += CreatePointLight(input, PointLightPositions[0], PointLightColors[0], PointLightAttenuations[0], Normal);
     //FinalColor += CreatePointLight(input, PointLightPositions[1], PointLightColors[1], PointLightAttenuations[1], Normal);
     

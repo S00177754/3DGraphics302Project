@@ -70,6 +70,7 @@
     <Content Include="Content\Effects\MixedLightEffect.fx" />
     <Content Include="Content\Textures\wood4.png" />
     <Content Include="Content\Textures\WoodNormal.png" />
+    <Content Include="Content\Textures\woodNormal2.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

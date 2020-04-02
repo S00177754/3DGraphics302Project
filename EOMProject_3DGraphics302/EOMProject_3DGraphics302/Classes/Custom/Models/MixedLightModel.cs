@@ -19,7 +19,7 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Models
                 DirectionalLightColor = Color.White,
                 DirectionalLightDirection = new Vector3(0,0,1),
                 DiffuseTextureOne = GameUtilities.Content.Load<Texture2D>(@"Textures/wood4"),
-                NormalTexture = GameUtilities.Content.Load<Texture2D>(@"Textures/WoodNormal")
+                NormalTexture = GameUtilities.Content.Load<Texture2D>(@"Textures/WoodNormal2")
             };
 
             CustomEffect = GameUtilities.Content.Load<Effect>("Effects/MixedLightEffect");

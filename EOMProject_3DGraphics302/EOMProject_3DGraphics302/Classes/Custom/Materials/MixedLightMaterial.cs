@@ -21,6 +21,7 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
         public Color DirectionalLightColor { get; set; }
         public Vector3 DirectionalLightDirection { get; set; }
         public Texture DiffuseTextureOne { get; set; }
+        public Texture DiffuseTextureTwo { get; set; }
         public Texture NormalTexture { get; set; }
 
         public Vector3 CameraPosition { get; set; }
@@ -37,6 +38,9 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
 
             if (effect.Parameters["DiffuseTextureOne"] != null)
                 effect.Parameters["DiffuseTextureOne"].SetValue(DiffuseTextureOne);
+
+            if (effect.Parameters["DiffuseTextureTwo"] != null)
+                effect.Parameters["DiffuseTextureTwo"].SetValue(DiffuseTextureTwo);
 
             if (effect.Parameters["NormalTexture"] != null)
                 effect.Parameters["NormalTexture"].SetValue(NormalTexture);

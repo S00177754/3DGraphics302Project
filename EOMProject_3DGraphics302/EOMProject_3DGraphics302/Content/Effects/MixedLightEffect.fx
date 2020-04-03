@@ -31,7 +31,7 @@ float3 DiffuseColor = float3(1, 1, 1);
 float3 AmbientColor = float3(.15, .15, .15);
 
 Texture2D DiffuseTextureOne;
-//Texture2D DiffuseTextureTwo;
+Texture2D DiffuseTextureTwo;
 Texture2D NormalTexture;
 
 float3 CameraPosition;
@@ -43,10 +43,10 @@ sampler DiffuseTextureSamplerOne = sampler_state
     texture = <DiffuseTexture>;
 };
 
-//sampler DiffuseTextureSamplerTwo = sampler_state
-//{
-//    texture = <DiffuseTextureTwo>;
-//};
+sampler DiffuseTextureSamplerTwo = sampler_state
+{
+    texture = <DiffuseTextureTwo>;
+};
 
 sampler NormalTextureSampler = sampler_state
 {
@@ -94,7 +94,7 @@ float3 CalculateAmbient(float2 UV)
 {
     float3 textureColor = DiffuseTextureOne.Sample(DiffuseTextureSamplerOne, UV);
     textureColor.rgb *= DiffuseColor.rgb;
-    //textureColor.rgb *= AmbientColor.rgb;
+    textureColor.rgb *= DiffuseTextureTwo.Sample(DiffuseTextureSamplerTwo, UV);
     
     return textureColor;
 }

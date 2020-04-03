@@ -13,6 +13,11 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
     {
         #region Properties
 
+        public Vector3[] PointLightPositions { get; set; }
+        public float[] PointLightAttenuations { get; set; }
+        public Color[] PointLightColors { get; set; }
+
+
         public Color DirectionalLightColor { get; set; }
         public Vector3 DirectionalLightDirection { get; set; }
         public Texture DiffuseTextureOne { get; set; }
@@ -39,16 +44,26 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
             if (effect.Parameters["CameraPosition"] != null)
                 effect.Parameters["CameraPosition"].SetValue(CameraPosition);
 
+
+            if (effect.Parameters["PointLightPositions"] != null)
+                effect.Parameters["PointLightPositions"].SetValue(PointLightPositions);
+
+            if (effect.Parameters["PointLightAttenuations"] != null)
+                effect.Parameters["PointLightAttenuations"].SetValue(PointLightAttenuations);
+
+            if (effect.Parameters["PointLightColors"] != null)
+                effect.Parameters["PointLightColors"].SetValue(PointLightColors.ToVector3());
+
             base.SetEffectParameters(effect);
         }
 
         public override void Update()
         {
-            //for (int i = 0; i < PointLightPositions.Length; i++)
-            //{
-            //    DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], PointLightAttenuations[i]), PointLightColors[i]);
-            //    DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], 1f), Color.DarkMagenta);
-            //}
+            for (int i = 0; i < PointLightPositions.Length; i++)
+            {
+                DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], PointLightAttenuations[i]), PointLightColors[i]);
+                DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], 1f), Color.DarkMagenta);
+            }
 
             base.Update();
         }

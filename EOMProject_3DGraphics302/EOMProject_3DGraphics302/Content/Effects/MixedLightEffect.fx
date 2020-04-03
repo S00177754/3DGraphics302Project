@@ -4,7 +4,7 @@
 	#define PS_SHADERMODEL ps_3_0
 #else
 	#define VS_SHADERMODEL vs_4_0_level_9_1
-	#define PS_SHADERMODEL ps_4_0_level_9_1
+	#define PS_SHADERMODEL ps_4_0_level_9_3
 #endif
 
 #define PL_AMT 2
@@ -15,11 +15,12 @@ matrix View;
 matrix Projection;
 
 //Point Light
-//float3 PointLightPositions[PL_AMT] = { float3(0, 0, 0), float3(0, 0, 0) };
-//float PointLightAttenuations[PL_AMT] = { 80, 40 };
-//float3 PointLightColors[PL_AMT] = { float3(1, 1, 1), float3(250, 1, 1) };
+float3 PointLightPositions[PL_AMT] = { float3(0, 0, 0), float3(0, 0, 0) };
+ 
+float PointLightAttenuations[PL_AMT] = { 80, 40 };
+float3 PointLightColors[PL_AMT] = { float3(1, 1, 1), float3(250, 1, 1) };
 
-//float PointLightFallOff = 2; //Inverse square law value
+float PointLightFallOff = 2; //Inverse square law value
 
 //Directional Light
 float3 DirectionalLightColor = float3(1, 0, 0);
@@ -69,6 +70,8 @@ struct VertexShaderOutput
     float3 ViewDirection : TEXCOORD3;
 };
 
+
+
 //Vertex Shader
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
@@ -82,13 +85,14 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	output.WorldPosition = worldPos;
 	output.UV = input.UV;
     output.ViewDirection = normalize(worldPos.xyz - CameraPosition); //Used for specular light calculations
-   
+
+    
 	return output;
 }
 
-float3 CalculateAmbient(VertexShaderOutput input)
+float3 CalculateAmbient(float2 UV)
 {
-    float3 textureColor = DiffuseTextureOne.Sample(DiffuseTextureSamplerOne, input.UV);
+    float3 textureColor = DiffuseTextureOne.Sample(DiffuseTextureSamplerOne, UV);
     textureColor.rgb *= DiffuseColor.rgb;
     //textureColor.rgb *= AmbientColor.rgb;
     
@@ -96,21 +100,22 @@ float3 CalculateAmbient(VertexShaderOutput input)
 }
 
 //Light Creation Methods
-//float3 CreatePointLight(VertexShaderOutput input, float3 lightPosition, float3 lightColor, float att, float3 normalData) : COLOR
-//{
-//    float3 LightingColor = AmbientColor; //Color when there isn't any light. 
-//    float3 LightingDirection = normalize(lightPosition - input.WorldPosition);
-//    float3 LightingIntensity = saturate(dot(LightingDirection, normalData)) * LightingColor;
+float3 CreatePointLight(VertexShaderOutput input, float3 lightPosition, float3 lightColor, float att, float3 normalData) : COLOR
+{
+    float3 LightingColor = AmbientColor; //Color when there isn't any light. 
+    float3 LightingDirection = normalize(lightPosition - input.WorldPosition);
+    float3 LightingIntensity = saturate(dot(LightingDirection, normalData)) * LightingColor;
     
-//    float3 ReflectionAngle = reflect(LightingDirection, normalData); //Angle between light direction and surface normal.
-//    float3 SpecularLight = pow(saturate(dot(ReflectionAngle, input.ViewDirection)), SpecularPower) * SpecularColor;
-//    float3 DistanceToLight = distance(lightPosition, input.WorldPosition);
-//    float LightingAttenuation = 1 - pow(clamp(DistanceToLight / att, 0, 1), PointLightFallOff); //Inverse square law -> how much light will the vertex recieve
+    float3 ReflectionAngle = reflect(LightingDirection, normalData); //Angle between light direction and surface normal.
+    float3 SpecularLight = pow(saturate(dot(ReflectionAngle, input.ViewDirection)), SpecularPower) * SpecularColor;
     
-//    float3 FinalColor = (LightingColor + SpecularLight + LightingIntensity) * LightingAttenuation; //Diffuse Color Applied in final calculation
-//    return FinalColor; //Apply saturate() once diffuse color has been applied.
+    float3 DistanceToLight = distance(lightPosition, input.WorldPosition);
+    float LightingAttenuation = 1 - pow(clamp(DistanceToLight / att, 0, 1), PointLightFallOff); //Inverse square law -> how much light will the vertex recieve
+    
+    float3 FinalColor = saturate(lightColor + SpecularLight + LightingIntensity) * LightingAttenuation; //Diffuse Color Applied in final calculation
+    return FinalColor; //Apply saturate() once diffuse color has been applied.
 
-//}
+}
 
 
 float3 DirectionalLightWithSpecular(VertexShaderOutput input, float3 normalData) : COLOR
@@ -161,11 +166,11 @@ float4 AmbientPS(VertexShaderOutput input):COLOR
     float3 Normal = tex2D(NormalTextureSampler, input.UV).rgb;
     Normal = Normal * 2 - 1;
     
-    float3 FinalColor = CalculateAmbient(input);
+    float3 FinalColor = CalculateAmbient(input.UV);
     //FinalColor += DirectionalLight(input, Normal);
     FinalColor += DirectionalLightWithSpecular(input, Normal);
-    //FinalColor += CreatePointLight(input, PointLightPositions[0], PointLightColors[0], PointLightAttenuations[0], Normal);
-    //FinalColor += CreatePointLight(input, PointLightPositions[1], PointLightColors[1], PointLightAttenuations[1], Normal);
+    FinalColor += CreatePointLight(input, PointLightPositions[0], PointLightColors[0], PointLightAttenuations[0], Normal);
+    FinalColor += CreatePointLight(input, PointLightPositions[1], PointLightColors[1], PointLightAttenuations[1], Normal);
     
     return float4(FinalColor, 1);
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/Effects/MixedLightEffect.fx</SourceFile>
-  <SourceTime>2020-04-03T17:52:57.1846752+01:00</SourceTime>
+  <SourceTime>2020-04-04T13:02:52.575988+01:00</SourceTime>
   <DestFile>C:/Users/Ronan/source/repos/S00177754/3DGraphics302Project/EOMProject_3DGraphics302/EOMProject_3DGraphics302/Content/bin/Windows/Effects/MixedLightEffect.xnb</DestFile>
-  <DestTime>2020-04-03T17:55:04.7514065+01:00</DestTime>
+  <DestTime>2020-04-04T15:07:29.6208309+01:00</DestTime>
   <Importer>EffectImporter</Importer>
   <ImporterTime>2018-12-08T16:35:54+00:00</ImporterTime>
   <Processor>EffectProcessor</Processor>

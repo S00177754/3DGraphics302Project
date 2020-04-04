@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Sample;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
         public float[] PointLightAttenuations { get; set; }
         public Color[] PointLightColors { get; set; }
 
+        public Color SpecularColor { get; set; }
 
         public Color DirectionalLightColor { get; set; }
         public Vector3 DirectionalLightDirection { get; set; }
@@ -32,6 +34,9 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
         {
             if (effect.Parameters["DirectionalLightColor"] != null)
                 effect.Parameters["DirectionalLightColor"].SetValue(DirectionalLightColor.ToVector3());
+
+            if (effect.Parameters["SpecularColor"] != null)
+                effect.Parameters["SpecularColor"].SetValue(SpecularColor.ToVector3());
 
             if (effect.Parameters["DirectionalLightDirection"] != null)
                 effect.Parameters["DirectionalLightDirection"].SetValue(DirectionalLightDirection);
@@ -63,10 +68,63 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
 
         public override void Update()
         {
+            //Attenuation Range and Light Position Debug Spheres
             for (int i = 0; i < PointLightPositions.Length; i++)
             {
                 DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], PointLightAttenuations[i]), PointLightColors[i]);
                 DebugEngine.AddBoundingSphere(new BoundingSphere(PointLightPositions[i], 1f), Color.DarkMagenta);
+            }
+
+            //Move Light 1
+            if (InputEngine.IsKeyHeld(Keys.Right))
+            {
+                PointLightPositions[0] += new Vector3(1, 0, 0);
+            }
+            if (InputEngine.IsKeyHeld(Keys.Down))
+            {
+                PointLightPositions[0] += new Vector3(0, 0, 1);
+            }
+            if (InputEngine.IsKeyHeld(Keys.Up))
+            {
+                PointLightPositions[0] += new Vector3(0, 0, -1);
+            }
+            if (InputEngine.IsKeyHeld(Keys.Left))
+            {
+                PointLightPositions[0] += new Vector3(-1, 0, 0);
+            }
+            if (InputEngine.IsKeyHeld(Keys.PageUp))
+            {
+                PointLightPositions[0] += new Vector3(0, 1, 0);
+            }
+            if (InputEngine.IsKeyHeld(Keys.PageDown))
+            {
+                PointLightPositions[0] += new Vector3(0, -1, 0);
+            }
+
+            //Move Light 2
+            if (InputEngine.IsKeyHeld(Keys.L))
+            {
+                PointLightPositions[1] += new Vector3(1, 0, 0);
+            }
+            if (InputEngine.IsKeyHeld(Keys.K))
+            {
+                PointLightPositions[1] += new Vector3(0, 0, 1);
+            }
+            if (InputEngine.IsKeyHeld(Keys.I))
+            {
+                PointLightPositions[1] += new Vector3(0, 0, -1);
+            }
+            if (InputEngine.IsKeyHeld(Keys.J))
+            {
+                PointLightPositions[1] += new Vector3(-1, 0, 0);
+            }
+            if (InputEngine.IsKeyHeld(Keys.U))
+            {
+                PointLightPositions[1] += new Vector3(0, 1, 0);
+            }
+            if (InputEngine.IsKeyHeld(Keys.O))
+            {
+                PointLightPositions[1] += new Vector3(0, -1, 0);
             }
 
             base.Update();
@@ -79,41 +137,7 @@ namespace EOMProject_3DGraphics302.Classes.Custom.Materials
 
     }
 
-    public class ColorMaterial : Material
-    {
-        public Color Color { get; set; }
-        public Texture2D Texture { get; set; }
-        public Texture2D Texture2 { get; set; }
-        public Vector2 UVOffset { get; set; }
-
-        public override void SetEffectParameters(Effect effect)
-        {
-            //color 0 - 255
-            //gpu 0 - 1
-
-            if (effect.Parameters["Color"] != null)
-                effect.Parameters["Color"].SetValue(Color.ToVector3());
-
-            if (effect.Parameters["Texture"] != null)
-                effect.Parameters["Texture"].SetValue(Texture);
-
-            if (effect.Parameters["Texture2"] != null)
-                effect.Parameters["Texture2"].SetValue(Texture2);
-
-            if (effect.Parameters["UVOffset"] != null)
-                effect.Parameters["UVOffset"].SetValue(UVOffset);
-
-            base.SetEffectParameters(effect);
-        }
-
-        public override void Update()
-        {
-            //Set scroll here
-            UVOffset += new Vector2(0.0001f, 0.0001f);
-            base.Update();
-        }
-    }
-
+   
 
     public static class Extensions 
     {

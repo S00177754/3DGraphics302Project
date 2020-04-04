@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Effects\MixedLightEffect.fx" />
+    <Content Include="Content\Textures\Nano.png" />
     <Content Include="Content\Textures\wood4.png" />
     <Content Include="Content\Textures\WoodNormal.png" />
     <Content Include="Content\Textures\woodNormal2.png" />
@@ -75,8 +76,8 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
-    <None Include="Content\Models\CollectorModel.fbx" />
-    <None Include="Content\Models\house.fbx" />
+    <None Include="Content\Fonts\debug2.spritefont" />
+    <None Include="Content\Models\Model.fbx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

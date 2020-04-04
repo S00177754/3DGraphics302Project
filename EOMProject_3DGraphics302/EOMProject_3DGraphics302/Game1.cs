@@ -22,6 +22,11 @@ namespace EOMProject_3DGraphics302
         List<MixedLightModel> gameObjects = new List<MixedLightModel>();
         Camera mainCamera;
 
+        //4K Render Variables
+        RenderTarget2D FourK_RT;
+        bool FourKToggle = false;
+        SpriteFont debugFont;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -29,6 +34,8 @@ namespace EOMProject_3DGraphics302
             graphics.PreferredBackBufferHeight = 1080;
             graphics.GraphicsProfile = GraphicsProfile.HiDef;
             graphics.ApplyChanges();
+
+            FourK_RT = new RenderTarget2D(GraphicsDevice,3820, 2160,false,SurfaceFormat.Color,DepthFormat.Depth24Stencil8);
 
             input = new InputEngine(this);
             debug = new DebugEngine();
@@ -40,6 +47,10 @@ namespace EOMProject_3DGraphics302
             Content.RootDirectory = "Content";
         }
 
+        /// <summary>
+        /// Initializes the model, loads relevant content and then adds gameobject to list.
+        /// </summary>
+        /// <param name="model"></param>
         void AddModel(MixedLightModel model)
         {
             model.Initialize();
@@ -55,14 +66,15 @@ namespace EOMProject_3DGraphics302
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // Game Utility Setup
             GameUtilities.Content = Content;
             GameUtilities.GraphicsDevice = GraphicsDevice;
 
             debug.Initialize();
             shapeDrawer.Initialize();
 
-            mainCamera = new Camera("cam", new Vector3(0, 100, 400), new Vector3(0, 0, -1));
+            //Camera setup
+            mainCamera = new Camera("camera", new Vector3(0, 100, 400), new Vector3(0, 0, -1));
             mainCamera.Initialize();
 
             
@@ -75,11 +87,10 @@ namespace EOMProject_3DGraphics302
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            debugFont = Content.Load<SpriteFont>(@"Fonts\debug2");
 
-            AddModel(new MixedLightModel("Model", Vector3.Zero));
-            // TODO: use this.Content to load your game content here
+            AddModel(new MixedLightModel("Model", Vector3.Zero)); 
         }
 
         /// <summary>
@@ -105,11 +116,14 @@ namespace EOMProject_3DGraphics302
 
             mainCamera.Update();
 
-
+            //UpdateCamera used for specular due to camera position relevant to light
             gameObjects.ForEach(go => go.Update());
             gameObjects.ForEach(go => go.UpdateCamera(mainCamera.World.Translation));
 
-            // TODO: Add your update logic here
+            //Toggle Logic for 4K Rendering
+            if (InputEngine.IsKeyPressed(Keys.R))
+                FourKToggle = !FourKToggle;
+
 
             base.Update(gameTime);
         }
@@ -120,8 +134,22 @@ namespace EOMProject_3DGraphics302
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
 
+            GraphicsDevice.Clear(Color.Black); //Using black to illustrate colors better
+
+            if (!FourKToggle)
+                GraphicsDevice.SetRenderTarget(null);
+            else
+            {
+                GraphicsDevice.SetRenderTarget(FourK_RT);
+                
+                //Below lines needed to avoid backfaces being rendered in front of object during spritebatch draw
+                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                GraphicsDevice.BlendState = BlendState.Opaque;
+            }
+
+
+            //Model Rendering
             foreach (CustomEffectModel model in gameObjects)
             {
                 if (mainCamera.Frustum.Contains(model.AABB) != ContainmentType.Disjoint)
@@ -133,7 +161,19 @@ namespace EOMProject_3DGraphics302
 
             debug.Draw(mainCamera);
 
-            // TODO: Add your drawing code here
+
+            GraphicsDevice.SetRenderTarget(null);
+
+            //4K spritebatch
+            if (FourKToggle)
+            {
+                spriteBatch.Begin(SpriteSortMode.Immediate,BlendState.Opaque);
+                spriteBatch.Draw(FourK_RT, GraphicsDevice.Viewport.Bounds, Color.White);
+                spriteBatch.DrawString(debugFont,"Drawing @ 4K", new Vector2(10, 10), Color.White);
+                spriteBatch.End();
+            }
+
+            GameUtilities.SetGraphicsDeviceFor3D();
 
             base.Draw(gameTime);
         }
